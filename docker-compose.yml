@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+
+  db_postgres:
+    image: postgres:14
+    restart: always
+    shm_size: 128mb
+    container_name: django_postgres
+    environment:
+      - POSTGRES_USER=blog
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=blog
+    volumes:
+      - django_postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  pg_admin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: django_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=1234
+    ports:
+      - 9000:80
+    depends_on:
+      - db_postgres
+
+volumes:
+  django_postgres:
+
+networks:
+  django_red:
